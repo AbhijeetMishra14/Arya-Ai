@@ -112,8 +112,9 @@ async def update_clipboard(payload: dict, current_user: str = Depends(get_curren
 @app.post("/continuity/files/upload")
 async def upload_file(target_device_id: str, sender_device_id: str, file: UploadFile = File(...), current_user: str = Depends(get_current_user)):
     transfer_id = str(uuid.uuid4())
-    os.makedirs("d:/Jarvis/arya_auth/uploads", exist_ok=True)
-    file_path = os.path.join("d:/Jarvis/arya_auth/uploads", f"{transfer_id}_{file.filename}")
+    upload_dir = os.path.join(os.getcwd(), "arya_auth", "uploads")
+    os.makedirs(upload_dir, exist_ok=True)
+    file_path = os.path.join(upload_dir, f"{transfer_id}_{file.filename}")
     with open(file_path, "wb") as buffer: shutil.copyfileobj(file.file, buffer)
     await neural_db.db['transfers'].insert_one({"transfer_id": transfer_id, "user_email": current_user, "sender_device_id": sender_device_id, "receiver_device_id": target_device_id, "file_name": file.filename, "file_path": file_path, "status": "ready", "created_at": datetime.utcnow()})
     return {"status": "ready", "transfer_id": transfer_id}
