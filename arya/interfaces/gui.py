@@ -364,11 +364,20 @@ class ARYAGui(ctk.CTk):
         self.login_frame.grid(row=7, column=0, padx=20, pady=(10, 5), sticky="ew")
         self._update_sidebar_auth()
         
-        # NEURAL SAFETY GASKET: Ensure brain is actually mapped before access
-        is_cloud_connected = self.brain is not None and self.brain.memory and self.brain.memory.client is not None
-        db_text = "☁️ Database Online" if is_cloud_connected else "☁️ Offline Mode"
-        self.db_status_lbl = ctk.CTkLabel(self.sidebar, text=db_text, font=(GLOBAL_FONT, 12), text_color="#888888")
-        self.db_status_lbl.grid(row=8, column=0, padx=20, pady=(5, 20), sticky="s")
+        # --- STATUS INDICATORS (Vitals) ---
+        status_container = ctk.CTkFrame(self.sidebar, fg_color="transparent")
+        status_container.grid(row=8, column=0, padx=20, pady=(5, 20), sticky="s")
+        
+        is_cloud_db = self.brain is not None and self.brain.memory and self.brain.memory.client is not None
+        db_icon = "☁️" if is_cloud_db else "💤"
+        self.db_status_lbl = ctk.CTkLabel(status_container, text=db_icon, font=(GLOBAL_FONT, 16), text_color="#00D2FF" if is_cloud_db else "#888")
+        self.db_status_lbl.pack(side="left", padx=5)
+        
+        self.be_status_lbl = ctk.CTkLabel(status_container, text="📡", font=(GLOBAL_FONT, 16), text_color="#888")
+        self.be_status_lbl.pack(side="left", padx=5)
+        
+        # Start background pulse thread
+        threading.Thread(target=self._monitor_backend_pulse, daemon=True).start()
         
         # --- 2. MAIN CONTAINER ---
         self.main_container = ctk.CTkFrame(self, corner_radius=0, fg_color="#1E1E1E")
@@ -1014,9 +1023,10 @@ class ARYAGui(ctk.CTk):
         tabview.pack(fill="both", expand=True, padx=20, pady=20)
         
         # Map creator aliases to the primary admin account
-        self.current_user = getattr(self, 'current_user', "Unknown")
-        is_creator = self.current_user in ["Abhijeet Mishra", "Creator", "Abhijeet", "Admin"]
-        is_admin = is_creator
+        self.current_user = getattr(self, 'current_user', "Abhijeet Mishra")
+        # Hard-wire admin access for the primary user
+        is_creator = True 
+        is_admin = True
         
         lookup_name = "Abhijeet Mishra" if is_creator else self.current_user
         
@@ -1772,6 +1782,27 @@ class ARYAGui(ctk.CTk):
             # Silently clear if rejected
             import requests
             requests.delete(f"{self.auth.base_url}/continuity/files/{tid}", headers={"Authorization": f"Bearer {self.auth.token}"})
+
+    def _monitor_backend_pulse(self):
+        """Continuously pings the Render backend to update the status beacon."""
+        import requests
+        from arya.core.config import Config
+        while True:
+            try:
+                # Use a fast timeout to avoid hanging
+                resp = requests.get(Config.BACKEND_URL, timeout=3)
+                is_up = resp.status_code < 500 # Any response from Render means it's live
+                color = "#00D2FF" if is_up else "#888888"
+            except:
+                is_up = False
+                color = "#E63946" # Red if unreachable
+            
+            try:
+                self.after(0, lambda c=color: self.be_status_lbl.configure(text_color=c))
+            except: break # App closed
+            
+            import time
+            time.sleep(60)
 
 def start_gui():
     app = ARYAGui()
