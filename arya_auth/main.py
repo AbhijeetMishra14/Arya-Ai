@@ -8,11 +8,20 @@ import shutil
 import uuid
 import motor.motor_asyncio
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 from arya_auth import models, db, auth_utils
 from arya_auth.db import neural_db, connect_to_mongo, close_mongo_connection
 
 app = FastAPI(title="ARYA Auth & Ecosystem API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class LoginRequest(BaseModel):
     username: str
