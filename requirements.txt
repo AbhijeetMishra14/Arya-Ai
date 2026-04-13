@@ -1,0 +1,14 @@
+google-generativeai
+tavily-python
+SpeechRecognition
+pyttsx3
+PyAudio
+psutil
+customtkinter
+python-dotenv
+pyautogui
+pygetwindow
+keyboard
+requests
+beautifulsoup4
+playwright

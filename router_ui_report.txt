@@ -1,0 +1,26 @@
+Inspecting Router at http://192.168.18.1...
+Screenshot saved as router_debug_view.png
+Page Title: EG8041V5
+
+Found 12 input elements:
+[0] Type: password, ID: old_password, Name: old_password, Placeholder: None
+[1] Type: password, ID: new_password, Name: new_password, Placeholder: None
+[2] Type: password, ID: confirm_password, Name: confirm_password, Placeholder: None
+[3] Type: password, ID: ssid1_password, Name: ssid1_password, Placeholder: None
+[4] Type: password, ID: ssid2_password, Name: ssid2_password, Placeholder: None
+[5] Type: text, ID: txt_Username, Name: txt_Username, Placeholder: None
+[6] Type: password, ID: txt_Password, Name: txt_Password, Placeholder: None
+[7] Type: loginsnNumber, ID: txt_loginsn, Name: txt_loginsn, Placeholder: None
+[8] Type: text, ID: VerificationCode, Name: VerificationCode, Placeholder: None
+[9] Type: button, ID: changecode, Name: None, Placeholder: None
+[10] Type: button, ID: loginbutton, Name: None, Placeholder: None
+[11] Type: button, ID: loginbutton, Name: None, Placeholder: None
+
+Found 4 button elements:
+[0] ID: button_update, Text/Value: Update
+[1] ID: changecode, Text/Value: Refresh
+[2] ID: loginbutton, Text/Value: Log In
+[3] ID: loginbutton, Text/Value: Log In
+
+Found 1 frames/iframes.
+Frame[0] URL: http://192.168.18.1/
