@@ -20,7 +20,13 @@ class LoginRequest(BaseModel):
 
 @app.on_event("startup")
 async def startup_db_client():
-    await connect_to_mongo()
+    print("[SYSTEM]: Initiating Neural Database Connection...")
+    try:
+        await connect_to_mongo()
+        print("[SYSTEM]: Neural Link Established with Atlas.")
+    except Exception as e:
+        print(f"[CRITICAL ERROR]: Neural Link Failed: {str(e)}")
+        # Don't re-raise, let the app start so we can see the logs
 
 # --- AUTH LOGIC ---
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
