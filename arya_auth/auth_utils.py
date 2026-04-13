@@ -4,9 +4,12 @@ from jose import JWTError, jwt
 from typing import Optional
 
 # Configuration
-SECRET_KEY = "ARYA_NEURAL_SECRET_CORE" # In production, use os.getenv
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 1 Week
+from arya_auth.config import AuthConfig
+
+# Get config via AuthConfig class
+SECRET_KEY = AuthConfig.SECRET_KEY
+ALGORITHM = AuthConfig.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = AuthConfig.ACCESS_TOKEN_EXPIRE_MINUTES
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

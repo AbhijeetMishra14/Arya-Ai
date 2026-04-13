@@ -1,5 +1,5 @@
 from motor.motor_asyncio import AsyncIOMotorClient
-from .config import AuthConfig
+from arya_auth.config import AuthConfig
 
 class DatabaseManager:
     def __init__(self):
