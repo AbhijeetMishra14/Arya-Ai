@@ -9,12 +9,8 @@ import uuid
 import motor.motor_asyncio
 from pydantic import BaseModel
 
-try:
-    from arya_auth import models, db, auth_utils
-    from arya_auth.db import neural_db, connect_to_mongo, close_mongo_connection
-except ImportError:
-    import models, db, auth_utils
-    from db import neural_db, connect_to_mongo, close_mongo_connection
+from arya_auth import models, db, auth_utils
+from arya_auth.db import neural_db, connect_to_mongo, close_mongo_connection
 
 app = FastAPI(title="ARYA Auth & Ecosystem API")
 
